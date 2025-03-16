@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Terms and Conditions{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">Terms of Service</h1>
+    <p class="hero-subtitle">Understanding Our Agreement</p>
+  </div>
+</section>
+
+<main class="container">
+  <section class="section-card" style="margin-top: 2rem;">
+    <div class="terms-header">
+      <p style="color: var(--text-muted);">Last Updated: 16/03/2025</p>
+      <p style="font-size: 1.125rem; margin-bottom: 1.5rem;">By using BookIT, you agree to these terms. Please read them carefully.</p>
+    </div>
+
+    <div class="features">
+      <article class="feature-card">
+        <i class="fas fa-check-circle"></i>
+        <h3>1. Acceptance of Terms</h3>
+        <p>Your access/use constitutes agreement to these terms. If disagreeing, refrain from using our services.</p>
+      </article>
+
+      <article class="feature-card">
+        <i class="fas fa-user-shield"></i>
+        <h3>2. User Responsibilities</h3>
+        <p>Maintain account security, provide accurate information, and adhere to library policies.</p>
+      </article>
+
+      <article class="feature-card">
+        <i class="fas fa-balance-scale"></i>
+        <h3>3. Intellectual Property</h3>
+        <p>Content remains property of respective rights holders. Limited usage granted for educational purposes.</p>
+      </article>
+
+      <article class="feature-card">
+        <i class="fas fa-ban"></i>
+        <h3>4. Prohibited Uses</h3>
+        <p>No unauthorized access, data mining, or system disruption. Commercial use restrictions apply.</p>
+      </article>
+
+      <article class="feature-card">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h3>5. Liability Limitations</h3>
+        <p>Not liable for incidental damages. Service provided "as-is" with reasonable care maintained.</p>
+      </article>
+
+      <article class="feature-card">
+        <i class="fas fa-gavel"></i>
+        <h3>6. Governing Law</h3>
+        <p>Subject to Philippines jurisdiction. Dispute resolution through arbitration.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-card">
+    <h2>Detailed Policies</h2>
+    <div class="details-grid">
+      <div class="book-info-card">
+        <h3><i class="fas fa-database"></i> Data Retention Policy</h3>
+        <p>User data preserved for 1 year post-account closure. Anonymized usage statistics retained indefinitely.</p>
+      </div>
+
+      <div class="book-info-card">
+        <h3><i class="fas fa-times-circle"></i> Termination Clause</h3>
+        <p>Reserve right to suspend accounts violating terms. Appeal process available through contact form.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="hero-buttons" style="margin: 2rem 0;">
+    <a href="/contacts" class="cta-btn">
+      <i class="fas fa-question-circle"></i>
+      Clarification Requests
+    </a>
+  </div>
+</main>
+
+{% endblock %}

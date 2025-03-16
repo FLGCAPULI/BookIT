@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Book{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Edit Book</h1>
+    <p>Update the details of the book.</p>
+
+    <!-- 🛡️ Flash Messages for Feedback -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data" id="editBookForm" novalidate>
+        {{ form.hidden_tag() }}
+        
+        <div class="form-container glass-effect">
+            <!-- Title Field -->
+            <div class="form-group">
+                {{ form.title.label }}<span class="required">*</span>
+                {{ form.title(class="form-control", placeholder="Enter book title") }}
+                {% if form.title.errors %}
+                    <small class="form-error">{{ form.title.errors[0] }}</small>
+                {% endif %}
+            </div>
+    
+            <!-- Author Field -->
+            <div class="form-group">
+                {{ form.author.label }}<span class="required">*</span>
+                {{ form.author(class="form-control", placeholder="Enter author's name") }}
+                {% if form.author.errors %}
+                    <small class="form-error">{{ form.author.errors[0] }}</small>
+                {% endif %}
+            </div>
+    
+            <!-- Genre Field -->
+            <div class="form-group">
+                {{ form.genre.label }}<span class="required">*</span>
+                {{ form.genre(class="form-control", placeholder="Enter genre") }}
+                {% if form.genre.errors %}
+                    <small class="form-error">{{ form.genre.errors[0] }}</small>
+                {% endif %}
+            </div>
+    
+            <!-- Description Field -->
+            <div class="form-group">
+                {{ form.description.label }}
+                {{ form.description(class="form-control", rows=4, placeholder="Enter description") }}
+                {% if form.description.errors %}
+                    <small class="form-error">{{ form.description.errors[0] }}</small>
+                {% endif %}
+            </div>
+    
+            <!-- Publication Year -->
+            <div class="form-group">
+                {{ form.publication_year.label }}<span class="required">*</span>
+                {{ form.publication_year(class="form-control", placeholder="Enter year") }}
+                {% if form.publication_year.errors %}
+                    <small class="form-error">{{ form.publication_year.errors[0] }}</small>
+                {% endif %}
+            </div>
+    
+            <!-- ISBN -->
+            <div class="form-group">
+                {{ form.isbn.label }}<span class="required">*</span>
+                {{ form.isbn(class="form-control", placeholder="Enter ISBN") }}
+                {% if form.isbn.errors %}
+                    <small class="form-error">{{ form.isbn.errors[0] }}</small>
+                {% endif %}
+            </div>
+    
+            <!-- Quantity -->
+            <div class="form-group">
+                {{ form.quantity.label }}<span class="required">*</span>
+                {{ form.quantity(class="form-control", placeholder="Enter quantity") }}
+                {% if form.quantity.errors %}
+                    <small class="form-error">{{ form.quantity.errors[0] }}</small>
+                {% endif %}
+            </div>
+        </div>
+    
+        <div class="form-actions">
+            <button type="submit" class="btn btn-gradient">Update Book</button>
+            <a href="{{ url_for('main.admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
