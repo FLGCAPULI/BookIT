@@ -1,4 +1,4 @@
-![logo](static/images/logorepo.png)
+<img src="lms_app/static/images/logo-name.png" width="300" alt="Library Management System Logo">
 
 ---
 
