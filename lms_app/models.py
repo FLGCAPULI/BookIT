@@ -34,6 +34,9 @@ class User(db.Model):
 
     def is_anonymous(self):
         return False
+
+    def has_feedback_for_book(self, book_id):
+        return any(feedback.book_id == book_id for feedback in self.feedbacks)
         
 @login_manager.user_loader
 def load_user(user_id):
