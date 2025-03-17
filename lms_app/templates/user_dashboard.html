@@ -99,6 +99,7 @@
                             <th scope="col">Book</th>
                             <th scope="col">Return Date</th>
                             <th scope="col">Fine</th>
+                            <th scope="col">Action</th>  <!-- New Action column -->
                         </tr>
                     </thead>
                     <tbody>
@@ -117,10 +118,20 @@
                                     $0.00
                                 {% endif %}
                             </td>
+                            <td>
+                                {% if current_user.has_feedback_for_book(history.book.id) %}
+                                    <button class="btn btn-secondary" disabled>Feedback Added</button>
+                                {% else %}
+                                    <a href="{{ url_for('main.add_feedback', book_id=history.book.id) }}" 
+                                       class="btn btn-primary">
+                                        Add Feedback
+                                    </a>
+                                {% endif %}
+                            </td>
                         </tr>
                         {% else %}
                         <tr>
-                            <td colspan="3" class="text-center">
+                            <td colspan="4" class="text-center">  <!-- Updated colspan to 4 -->
                                 <div class="empty-state">
                                     <i class="fas fa-book fa-3x"></i>
                                     <p>You have no borrowing history.</p>

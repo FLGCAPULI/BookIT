@@ -126,9 +126,19 @@ def logout():
 @login_required
 def user_dashboard():
 
-    current_loans = Transaction.query.filter_by(user_id=current_user.id, status='Borrowed').all()
+    current_user_obj = db.session.query(User).options(
+        db.joinedload(User.feedbacks)
+    ).get(current_user.id)
 
-    borrowing_history = Transaction.query.filter_by(user_id=current_user.id, status='Returned').all()
+    current_loans = Transaction.query.filter_by(
+        user_id=current_user.id, 
+        status='Borrowed'
+    ).all()
+
+    borrowing_history = Transaction.query.filter_by(
+        user_id=current_user.id, 
+        status='Returned'
+    ).all()
 
     borrowed_genres = db.session.query(Book.genre, func.count(Book.id))\
         .join(Transaction, Book.id == Transaction.book_id)\
@@ -430,75 +440,64 @@ def borrow_book(book_id):
 @main.route('/return/<int:transaction_id>', methods=['GET', 'POST'])
 @login_required
 def return_book(transaction_id):
-
     transaction = Transaction.query.get_or_404(transaction_id)
     book = transaction.book
     
-    if transaction.user_id != current_user.id:
-        current_app.logger.warning(f'Unauthorized access attempt by user {current_user.id}')
-        abort(403)
-    if transaction.status != 'Borrowed':
-        flash('This book has already been returned.', 'info')
+    if transaction.user_id != current_user.id or transaction.status != 'Borrowed':
+        abort(403) if transaction.user_id != current_user.id else flash('Book already returned.', 'info')
         return redirect(url_for('main.user_dashboard'))
 
-    feedbacks = Feedback.query.filter_by(book_id=book.id).all()
-
-    average_rating = db.session.query(func.avg(Feedback.rating)).filter_by(book_id=book.id).scalar() or 0
-
     if request.method == 'POST':
-
         rating = request.form.get('rating', type=int)
         message = request.form.get('message', '').strip()
-        
-        session['returning_transaction'] = transaction_id
-
-        if not rating or not message:
-            flash('Both rating and feedback message are required.', 'danger')
-            return redirect(url_for('main.return_book', transaction_id=transaction_id))
 
         try:
-
-            feedback = Feedback(
-                user_id=current_user.id,
-                book_id=book.id,
-                rating=rating,
-                message=message
-            )
-            db.session.add(feedback)
-
+            # Process return
             transaction.return_date = datetime.utcnow()
-
             book.quantity += 1
+            transaction.status = 'Returned'
             
+            # Calculate fine if overdue
             if transaction.return_date > transaction.due_date:
                 days_overdue = (transaction.return_date - transaction.due_date).days
                 transaction.fine_amount = days_overdue * 1.0
-                transaction.status = 'Overdue'
                 flash_msg = f'Book returned late. Fine: ${transaction.fine_amount:.2f}'
             else:
-                transaction.status = 'Returned'
+                transaction.fine_amount = 0
                 flash_msg = 'Book returned successfully! ✅'
 
-            db.session.commit()
-            current_app.logger.info(f'Transaction {transaction_id} returned successfully')
+            # Process feedback if provided
+            if rating is not None and message:
+                existing_feedback = Feedback.query.filter_by(
+                    user_id=current_user.id,
+                    book_id=book.id
+                ).first()
 
-            # Clear the session after successful return
-            session.pop('returning_transaction', None)  # 👈 Clear session data
+                if existing_feedback:
+                    existing_feedback.rating = rating
+                    existing_feedback.message = message
+                else:
+                    feedback = Feedback(
+                        user_id=current_user.id,
+                        book_id=book.id,
+                        rating=rating,
+                        message=message
+                    )
+                    db.session.add(feedback)
+
+            db.session.commit()
+            flash(flash_msg, 'success')
+            return redirect(url_for('main.user_dashboard'))
 
         except Exception as e:
             db.session.rollback()
-            current_app.logger.error(f'Return failed: {str(e)}', exc_info=True)
-            flash('An error occurred while processing your return.', 'danger')
+            flash('An error occurred during return processing.', 'danger')
             return redirect(url_for('main.user_dashboard'))
 
-        flash(flash_msg, 'success')
-        return redirect(url_for('main.user_dashboard'))
-
-    # GET request - show feedback form
-    return render_template('feedback.html',
-                         book=book,
-                         feedbacks=feedbacks,  # Pass the evaluated list of feedbacks
-                         average_rating=round(average_rating, 1))  # Pass the average rating
+    # GET request shows feedback form (optional)
+    feedbacks = Feedback.query.filter_by(book_id=book.id).all()
+    average_rating = db.session.query(func.avg(Feedback.rating)).filter_by(book_id=book.id).scalar() or 0
+    return render_template('feedback.html', book=book, feedbacks=feedbacks, average_rating=round(average_rating, 1))
     
 # 🟢 Clear Fine (User/Manual)
 @main.route('/clear_fine/<int:transaction_id>', methods=['POST'])
@@ -517,39 +516,47 @@ def add_feedback(book_id):
     book = Book.query.get_or_404(book_id)
     
     if request.method == 'POST':
-        message = request.form.get('message')
-        rating = request.form.get('rating')
+        message = request.form.get('message', '').strip()
+        rating = request.form.get('rating', type=int)
 
-        # Check if the user has already submitted feedback for this book
-        existing_feedback = Feedback.query.filter_by(user_id=current_user.id, book_id=book.id).first()
-
-        if existing_feedback:
-            # Update existing feedback
-            existing_feedback.message = message
-            existing_feedback.rating = rating
-            flash('Your feedback has been updated!', 'success')
-        else:
-            # Create new feedback
-            if not message:
-                flash('Message is required!', 'danger')
-                return render_template('feedback.html', book=book)
-
-            existing_feedback = Feedback(user_id=current_user.id, book_id=book.id, message=message, rating=rating)
-            flash('Feedback submitted!', 'success')
-            db.session.add(existing_feedback)
+        # Validate both fields
+        if not message or rating is None:
+            flash('Both rating and message are required!', 'danger')
+            feedbacks = Feedback.query.filter_by(book_id=book.id).all()
+            return render_template('feedback.html', book=book, feedbacks=feedbacks)
 
         try:
+            # Check for existing feedback
+            existing_feedback = Feedback.query.filter_by(
+                user_id=current_user.id, 
+                book_id=book.id
+            ).first()
+            
+            if existing_feedback:
+                db.session.delete(existing_feedback)
+
+            # Create new feedback
+            new_feedback = Feedback(
+                user_id=current_user.id,
+                book_id=book.id,
+                message=message,
+                rating=rating
+            )
+            
+            db.session.add(new_feedback)
             db.session.commit()
+            flash('Feedback submitted successfully!', 'success')
+
         except Exception as e:
-            db.session.rollback()  # Rollback the session on error
-            flash(f'Error submitting feedback: {e}', 'danger')
+            db.session.rollback()
+            flash(f'Error processing feedback: {str(e)}', 'danger')
             return redirect(url_for('main.book_details', slug=book.slug))
 
         return redirect(url_for('main.book_details', slug=book.slug))
 
-    # GET request - show feedback form
-    feedbacks = Feedback.query.filter_by(book_id=book.id).all()  # Fetch existing feedbacks for the book
-    return render_template('feedback.html', book=book, feedbacks=feedbacks)  # Pass the book and feedbacks
+    # GET request handling remains the same
+    feedbacks = Feedback.query.filter_by(book_id=book.id).all()
+    return render_template('feedback.html', book=book, feedbacks=feedbacks)
 
 # 👑 Secure Admin Registration (with Secret Key in URL Params)
 @main.route('/adminreg', methods=['GET', 'POST'])
