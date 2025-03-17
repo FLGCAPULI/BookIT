@@ -6,22 +6,6 @@ A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAl
 
 ---
 
-# Issues
-
-- 🧩 Jenga code
-
-- 🐛 Buggy GUI
-
-- 🚫 No global access (Only works on `local network`)  
-
-- 💣 Very unstable database
-
-- 🎀 Lots of Loose Ends
-
-- im lazy
-
----
-
 ## ⚡ Features
 
 - 🔐 **User Authentication & Role-Based Access**
