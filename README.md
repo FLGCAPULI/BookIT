@@ -1,24 +1,8 @@
-![logo](static/images/logorepo.png)
+<img src="lms_app/static/images/logo-name.png" width="300" alt="LMS Logo">
 
 ---
 
 A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAlchemy**, and **Flask-Migrate**. It supports user authentication, role-based access control, book management, transaction tracking, and feedback handling. 
-
----
-
-# Issues
-
-- 🧩 Jenga code
-
-- 🐛 Buggy GUI
-
-- 🚫 No global access (Only works on `local network`)  
-
-- 💣 Very unstable database
-
-- 🎀 Lots of Loose Ends
-
-- im lazy
 
 ---
 
