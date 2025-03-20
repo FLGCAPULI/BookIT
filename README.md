@@ -205,5 +205,5 @@ LMS/
 5. Open a Pull Request
 
 <div align="center">
-  <sub>Built with ❤️ by <a href="https://github.com/FLGCAPULI">FLGCAPULI</a></sub> <a href="https://github.com/Jethro-Cortez">Jethro Cortez</a></sub> | <sub>📧 <a href="mailto:franzlester20@gmail.com">Contact Maintainer</a></sub>
+  <sub>Built with ❤️ by <a href="https://github.com/FLGCAPULI">FLGCAPULI</a></sub> <a href="https://github.com/Jethro-Cortez">Jethro-Cortez</a></sub> | <sub>📧 <a href="mailto:franzlester20@gmail.com">Contact Maintainer</a></sub>
 </div>
