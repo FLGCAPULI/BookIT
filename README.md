@@ -1,20 +1,52 @@
-<img src="lms_app/static/images/logo-name.png" width="300" alt="LMS Logo">
+<p align="center">
+  <img src="lms_app/static/images/logo-name.png" width="300" alt="LMS Logo">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Flask-2.3.x-informational?logo=flask" alt="Flask">
+  <img src="https://img.shields.io/badge/SQLAlchemy-2.0-important?logo=sqlite" alt="SQLAlchemy">
+  <img src="https://img.shields.io/badge/License-MIT-success" alt="License">
+  <img src="https://img.shields.io/badge/Version-1.0.0-blueviolet" alt="Version">
+</p>
+
+<h3 align="center">📚 Modern Library Management System | 🔐 Role-Based Access | 🌓 Dark Mode</h3>
 
 ---
 
-A full-stack Library Management System built with **Flask**, **SQLite**, **SQLAlchemy**, and **Flask-Migrate**. It supports user authentication, role-based access control, book management, transaction tracking, and feedback handling. 
+<div align="center">
+  
+[![Live Demo](https://img.shields.io/badge/TRY_LIVE_DEMO-%2300b894?style=for-the-badge&logo=firefox)](https://your-demo-link.com)
+[![Report Issue](https://img.shields.io/badge/REPORT_ISSUE-%23e84393?style=for-the-badge&logo=github)](https://github.com/your-repo/issues)
+
+</div>
 
 ---
 
-## ⚡ Features
+## 🎯 **Key Features**
 
-- 🔐 **User Authentication & Role-Based Access**
-- 📖 **Book Borrowing, Returning, and Inventory Management**
-- 💰 **Fine Calculation for Overdue Books**
-- 🗨️ **User Feedback & Reviews**
-- 🌗 **Dark/Light Mode Toggle**
-- 📊 **Admin Dashboard with Analytics**
-- 🗄️ **Database with Flask-Migrate for Easy Migrations**
+<div align="center">
+  
+| **Authentication** 🔐 | **Book Management** 📖 | **Analytics** 📊 |
+|-----------------------|------------------------|------------------|
+| Role-based access control | Borrow/return tracking | Visual dashboard |
+| Admin registration portal | Inventory management | Overdue fines stats |
+| Secure password hashing | ISBN validation | User activity logs |
+
+</div>
+
+---
+
+## 🧩 Tech Stack
+<div align="center">
+
+| Component          | Technology                                                                                |
+|--------------------|-------------------------------------------------------------------------------------------|
+| Backend Framework  | <img src="https://img.shields.io/badge/Flask-2.3.x-informational?logo=flask" width="150"> |
+| Database ORM       | <img src="https://img.shields.io/badge/SQLAlchemy-2.0-important" width="150">             |
+| Frontend           | <img src="https://img.shields.io/badge/Jinja2-3.x-blueviolet" width="150">                |
+| Styling            | <img src="https://img.shields.io/badge/Bootstrap-5.3-8A2BE2" width="150">                 |
+
+</div>
 
 ---
 
@@ -158,3 +190,20 @@ LMS/
   flask db migrate -m "Reset migrations"
   flask db upgrade
   ```
+---
+
+## 🌱 Contribution
+
+<p align="center">
+  <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge" alt="Contributions Welcome">
+</p>
+
+1. Fork the repository
+2. Create your feature branch (git checkout -b feature/AmazingFeature)
+3. Commit your changes (git commit -m 'Add AmazingFeature')
+4. Push to the branch (git push origin feature/AmazingFeature)
+5. Open a Pull Request
+
+<div align="center">
+  <sub>Built with ❤️ by <a href="https://github.com/FLGCAPULI">FLGCAPULI</a></sub> <a href="https://github.com/Jethro-Cortez">Jethro Cortez</a></sub> | <sub>📧 <a href="mailto:franzlester20@gmail.com">Contact Maintainer</a></sub>
+</div>
